@@ -1,13 +1,18 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors')
+const express = require("express")
+const app = express()
+const path = require('path');
+const cookieParser = require('cookie-parser')
+const logger = require('morgan')
+const bodyParser = require("body-parser")
+const multer = require('multer')
+const upload = multer()
+const port = 3000
+const indexRouter = require('./routes/index')
+const usersRouter = require('./routes/users')
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,5 +42,20 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
+
+app.post('/getinfo',function(req,res){
+  console.log(req.body)
+  res.json(req.body)
+  res.status(200).send()
+})
 
 module.exports = app;
